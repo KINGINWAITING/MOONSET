@@ -41,10 +41,10 @@ function CommunityContent() {
             <div className="rounded-full border-4 border-background overflow-hidden h-24 w-24 bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground">
               <Users className="h-12 w-12" />
             </div>
-            <div className="flex-1">
+            <main className="flex-1 w-full h-full flex flex-col overflow-hidden">
               <h1 className="text-2xl font-bold">MOONSET Community</h1>
               <p className="text-muted-foreground">Connect with fellow truth-seekers and share your insights</p>
-            </div>
+            </main>
           </div>
         </CardContent>
       </Card>

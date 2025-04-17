@@ -67,7 +67,7 @@ export default function GovernancePage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="w-full h-full flex flex-col space-y-6">
       <h1 className="text-2xl font-bold tracking-tight">Governance</h1>
       <p className="text-muted-foreground">Participate in the MOONSET governance process by voting on proposals.</p>
 

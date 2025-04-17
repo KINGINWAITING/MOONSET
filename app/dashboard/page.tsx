@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react"
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-6 relative">
+    <div className="w-full h-full flex flex-col space-y-6 relative">
       <div className="flex flex-col space-y-4">
         <Card className="flex-1">
           <CardHeader className="pb-2">

@@ -1,3 +1,18 @@
+export interface Achievement {
+  id: string
+  title: string
+  description: string
+  icon: string
+  date: string
+}
+
+export interface Activity {
+  id: string
+  type: string
+  description: string
+  date: string
+}
+
 export interface UserProfile {
   id: string
   name: string
@@ -12,6 +27,8 @@ export interface UserProfile {
   moonsetBalance: number
   researchContributions: number
   proposalsVoted: number
+  achievements?: Achievement[]
+  activity?: Activity[]
 }
 
 export interface Post {

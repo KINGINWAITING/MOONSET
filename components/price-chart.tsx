@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { AreaChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Area } from "recharts"
+import { AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Area } from "recharts"
 
 // Sample data - in a real app, this would come from your API
 const data = [
@@ -87,7 +87,6 @@ export function PriceChart() {
               bottom: 0,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="date" tickLine={false} axisLine={false} />
             <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`} domain={["auto", "auto"]} />
             <Tooltip

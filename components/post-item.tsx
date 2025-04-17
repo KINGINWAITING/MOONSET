@@ -3,10 +3,11 @@
 import { useState } from "react"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Heart, MessageSquare, Share2, MoreHorizontal } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
-import type { Post } from "@/lib/types"
+import { MessageSquare, Heart, Share2, Bookmark, ChevronDown, ChevronUp, MoreHorizontal } from "lucide-react"
 import { useProfile } from "@/components/profile-context"
+import { CommentSection } from "@/components/comment-section"
+import type { Post } from "@/lib/types"
+import { formatDistanceToNow } from "date-fns"
 import Link from "next/link"
 
 interface PostItemProps {
@@ -14,8 +15,11 @@ interface PostItemProps {
 }
 
 export function PostItem({ post }: PostItemProps) {
-  const { toggleLike } = useProfile()
+  const { toggleLike, postComments, addComment } = useProfile()
+  const [isSaved, setIsSaved] = useState(false)
+  const [showComments, setShowComments] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
+  const comments = postComments[post.id] || []
 
   const formattedDate = formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })
 
@@ -101,6 +105,15 @@ export function PostItem({ post }: PostItemProps) {
             )}
           </div>
         </div>
+        
+        {/* Comment section */}
+        {showComments && (
+          <CommentSection 
+            postId={post.id} 
+            comments={comments} 
+            onAddComment={addComment} 
+          />
+        )}
       </CardContent>
       <CardFooter className="px-4 py-2 border-t flex justify-between">
         <Button
@@ -112,10 +125,22 @@ export function PostItem({ post }: PostItemProps) {
           <Heart className={`h-4 w-4 mr-1 ${post.hasLiked ? "fill-red-500 text-red-500" : ""}`} />
           {post.likes > 0 && post.likes}
         </Button>
-        <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-          <MessageSquare className="h-4 w-4 mr-1" />
-          {post.comments > 0 && post.comments}
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="h-8 px-2 text-muted-foreground hover:text-foreground"
+            onClick={() => setShowComments(!showComments)}
+          >
+            <MessageSquare className="h-4 w-4 mr-1" />
+            <span className="text-xs">{post.comments}</span>
+            {showComments ? (
+              <ChevronUp className="h-3 w-3 ml-1" />
+            ) : (
+              <ChevronDown className="h-3 w-3 ml-1" />
+            )}
+          </Button>
+        </div>
         <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
           <Share2 className="h-4 w-4 mr-1" />
         </Button>

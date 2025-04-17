@@ -266,7 +266,7 @@ export default function DashboardLayout({
                 <h1 className="text-lg font-semibold">MOONSET Dashboard</h1>
               </div>
             </div>
-            <div className="flex-1 p-6 animate-gradient bg-gradient-to-br from-blue-900/20 via-blue-800/20 to-red-800/10 background-animate">{children}</div>
+            <div className="flex-1 w-full h-full animate-gradient bg-gradient-to-br from-blue-900/20 via-blue-800/20 to-red-800/10 background-animate overflow-auto">{children}</div>
           </SidebarInset>
         </div>
       </SidebarProvider>
