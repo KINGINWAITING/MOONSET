@@ -1,10 +1,32 @@
 import { NextRequest, NextResponse } from "next/server"
-import OpenAI from "openai"
+// OpenAI import is no longer needed for disabled state
+// import OpenAI from "openai"
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+// // Check if OpenAI API key is available
+// if (!process.env.OPENAI_API_KEY) {
+//   console.warn("OPENAI_API_KEY is not set. OpenAI features will be disabled.")
+// }
+
+// // Initialize OpenAI client only if API key is available
+// const openai = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null
 
 export async function POST(req: NextRequest) {
+  // Immediately return a message indicating the feature is disabled
+  return NextResponse.json(
+    { text: "AI features are temporarily disabled." },
+    { status: 200 } // Return 200 OK, as the API itself is working, just the feature is off
+  );
+
+  /* // Original logic commented out:
   try {
+    // Return early if OpenAI is not configured
+    if (!openai) {
+      return NextResponse.json(
+        { error: "OpenAI API is not configured. Please set OPENAI_API_KEY environment variable." },
+        { status: 503 }
+      )
+    }
+
     const contentType = req.headers.get("content-type") || "";
     let prompt = "";
     let files: File[] = [];
@@ -43,4 +65,5 @@ export async function POST(req: NextRequest) {
   } catch (err: any) {
     return NextResponse.json({ error: err.message || "OpenAI API error" }, { status: 500 });
   }
+  */
 }
