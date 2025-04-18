@@ -1,24 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import OpenAI from "openai"
 
-// Check if OpenAI API key is available
-if (!process.env.OPENAI_API_KEY) {
-  console.warn("OPENAI_API_KEY is not set. OpenAI features will be disabled.")
-}
-
-// Initialize OpenAI client only if API key is available
-const openai = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 export async function POST(req: NextRequest) {
   try {
-    // Return early if OpenAI is not configured
-    if (!openai) {
-      return NextResponse.json(
-        { error: "OpenAI API is not configured. Please set OPENAI_API_KEY environment variable." },
-        { status: 503 }
-      )
-    }
-
     const contentType = req.headers.get("content-type") || "";
     let prompt = "";
     let files: File[] = [];
