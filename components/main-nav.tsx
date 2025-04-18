@@ -1,30 +1,32 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { NavLink } from "@/components/nav-link"
 import { Button } from "@/components/ui/button"
-import { LogOut } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { LogOut, User, LogIn, UserPlus } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { useUser, UserButton, SignInButton, SignUpButton, useClerk } from "@clerk/nextjs"
+import { dark } from "@clerk/themes"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { useAuthTransition } from "@/app/auth-transition"
 
 interface MainNavProps {
   className?: string
 }
 
 export function MainNav({ className }: MainNavProps) {
+  const { isSignedIn, user, isLoaded } = useUser()
+  const { signOut } = useClerk()
   const router = useRouter()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isSigningOut, setIsSigningOut] = useState(false)
+  const { startTransition } = useAuthTransition()
 
-  useEffect(() => {
-    // Check if user is logged in
-    const loggedIn = localStorage.getItem("isLoggedIn") === "true"
-    setIsLoggedIn(loggedIn)
-  }, [])
-
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn")
-    setIsLoggedIn(false)
-    router.push("/")
+  const handleSignOut = () => {
+    setIsSigningOut(true)
+    startTransition()
+    
+    // Navigate to dedicated sign-out page for cleaner transition
+    router.push("/sign-out")
   }
 
   return (
@@ -38,30 +40,70 @@ export function MainNav({ className }: MainNavProps) {
       <NavLink href="/roadmap" className="text-sm font-medium hover:underline underline-offset-4">
         Roadmap
       </NavLink>
-      <NavLink href="/dashboard" className="text-sm font-medium hover:underline underline-offset-4">
-        Dashboard
-      </NavLink>
       
-      <div className="ml-auto flex items-center gap-4">
+      {isLoaded && isSignedIn && (
+        <NavLink href="/dashboard" className="text-sm font-medium hover:underline underline-offset-4">
+          Dashboard
+        </NavLink>
+      )}
+      
+      <div className="ml-auto flex items-center gap-3">
         <ThemeToggle />
         
-        {isLoggedIn ? (
-          <Button
-            variant="outline"
-            onClick={handleLogout}
-            className="gap-2 border-secondary text-secondary hover:bg-secondary/10"
-          >
-            <LogOut className="h-4 w-4" />
-            Logout
-          </Button>
+        {isLoaded && isSignedIn ? (
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline"
+              asChild
+              className="gap-2"
+            >
+              <NavLink href="/dashboard/profile">
+                <User className="h-4 w-4" />
+                <span className="hidden md:inline">Profile</span>
+              </NavLink>
+            </Button>
+            
+            <Button 
+              variant="destructive" 
+              size="sm"
+              onClick={handleSignOut}
+              disabled={isSigningOut}
+              className="gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="hidden md:inline">{isSigningOut ? "Signing Out..." : "Sign Out"}</span>
+            </Button>
+            
+            <UserButton 
+              afterSignOutUrl="/sign-out"
+              appearance={{
+                baseTheme: dark,
+                elements: {
+                  userButtonAvatarBox: "h-8 w-8",
+                  userButtonTrigger: "border border-border rounded-full hover:bg-accent focus:ring-blue-500 focus:ring-2",
+                  userButtonPopoverCard: "bg-background border border-border shadow-lg rounded-xl overflow-hidden",
+                  userButtonPopoverFooter: "border-t border-border",
+                  userButtonPopoverActionButton: "text-sm text-foreground hover:bg-accent",
+                  userButtonPopoverActionButtonText: "text-sm font-medium",
+                  userButtonPopoverActionButtonIcon: "text-muted-foreground"
+                }
+              }}
+            />
+          </div>
         ) : (
           <>
-            <Button variant="outline" asChild>
-              <NavLink href="/login">Login</NavLink>
-            </Button>
-            <Button asChild className="bg-secondary hover:bg-secondary/90 text-secondary-foreground">
-              <NavLink href="/signup">Sign Up</NavLink>
-            </Button>
+            <SignInButton mode="modal" afterSignInUrl="/dashboard">
+              <Button variant="outline" className="gap-2">
+                <LogIn className="h-4 w-4" />
+                <span>Sign In</span>
+              </Button>
+            </SignInButton>
+            <SignUpButton mode="modal" afterSignInUrl="/dashboard" afterSignUpUrl="/dashboard">
+              <Button className="bg-blue-500 hover:bg-blue-600 text-white gap-2">
+                <UserPlus className="h-4 w-4" />
+                <span>Sign Up</span>
+              </Button>
+            </SignUpButton>
           </>
         )}
       </div>

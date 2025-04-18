@@ -1,0 +1,104 @@
+/* Ensure Clerk modal elements are visible */
+.cl-modalBackdrop,
+.cl-modal,
+.cl-card,
+.cl-signIn,
+.cl-signUp,
+.cl-userProfile,
+.cl-userButton__popover {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* Make sure the backdrop works correctly */
+.cl-modalBackdrop {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  z-index: 50 !important;
+  animation: fadeIn 0.2s ease-out !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Ensure modal content is visible and properly positioned */
+.cl-modal {
+  z-index: 51 !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  animation: scaleIn 0.2s ease-out !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+}
+
+/* Enhanced styling for modal content */
+.cl-modalContent {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  transition: transform 0.2s ease, opacity 0.2s ease !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  max-width: 480px !important;
+}
+
+/* Center content within the modal */
+.cl-card {
+  margin: 0 auto !important;
+  width: 100% !important;
+}
+
+/* Button styling */
+.cl-formButtonPrimary {
+  transition: all 0.2s ease !important;
+  transform: translateY(0) !important;
+}
+
+.cl-formButtonPrimary:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.cl-formButtonPrimary:active {
+  transform: translateY(1px) !important;
+}
+
+/* Input field focus effects */
+.cl-formFieldInput:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Social buttons styling */
+.cl-socialButtonsBlockButton {
+  transition: all 0.2s ease !important;
+}
+
+.cl-socialButtonsBlockButton:hover {
+  transform: translateY(-1px) !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+} 

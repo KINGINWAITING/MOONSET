@@ -1,46 +1,39 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import { SignInButton, SignUpButton } from "@clerk/nextjs"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { AuthModal } from "@/components/auth-modal"
+import { Button } from "@/components/ui/button"
 
 interface NavLinkProps {
   href: string
-  className?: string
   children: React.ReactNode
+  className?: string
 }
 
-export function NavLink({ href, className, children }: NavLinkProps) {
-  const router = useRouter()
-  const [showAuthModal, setShowAuthModal] = useState(false)
-
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // If trying to access dashboard
-    if (href.startsWith("/dashboard")) {
-      // Check if logged in
-      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"
-
-      if (!isLoggedIn) {
-        e.preventDefault()
-        setShowAuthModal(true)
-        return
-      }
-    }
+export function NavLink({ href, children, className }: NavLinkProps) {
+  if (href === "/sign-in") {
+    return (
+      <SignInButton mode="modal">
+        <Button variant="ghost" className={className}>
+          {children}
+        </Button>
+      </SignInButton>
+    )
   }
 
-  const handleModalClose = () => {
-    setShowAuthModal(false)
+  if (href === "/sign-up") {
+    return (
+      <SignUpButton mode="modal">
+        <Button variant="ghost" className={className}>
+          {children}
+        </Button>
+      </SignUpButton>
+    )
   }
 
   return (
-    <>
-      <Link href={href} className={className} onClick={handleClick}>
-        {children}
-      </Link>
-      <AuthModal isOpen={showAuthModal} onClose={handleModalClose} defaultTab="login" />
-    </>
+    <Link href={href} className={className}>
+      {children}
+    </Link>
   )
 }

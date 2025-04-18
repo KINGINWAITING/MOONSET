@@ -185,3 +185,316 @@
   background: rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
+
+/* Clerk Modal Customizations - REMOVED */
+
+/* Dashboard Entrance Animations */
+.dashboard-entrance {
+  animation: dashboardEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Settings Page Customizations */
+.settings-card {
+  @apply rounded-lg border border-border/50 bg-card/50 backdrop-blur-sm shadow-sm;
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.dark .settings-card {
+  @apply border-border/30 bg-card/30;
+}
+
+.settings-input {
+  @apply rounded-md border border-input bg-background/70 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  @apply transition-all duration-150 ease-in-out;
+}
+
+.settings-input:focus-visible {
+   @apply border-primary/80;
+}
+
+.dark .settings-input {
+   @apply bg-background/50 border-input/70;
+}
+
+.settings-tab {
+  @apply px-4 py-2 text-sm font-medium text-muted-foreground transition-colors duration-150 ease-in-out;
+  @apply data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm;
+  @apply hover:bg-muted/50 hover:text-foreground;
+}
+
+.dark .settings-tab {
+  @apply data-[state=active]:bg-primary/20;
+  @apply hover:bg-muted/30;
+}
+
+.settings-switch[data-state='checked'] {
+  @apply bg-primary;
+}
+
+.settings-switch[data-state='unchecked'] {
+  @apply bg-input;
+}
+
+.settings-separator {
+  @apply bg-border/60;
+}
+
+.dark .settings-separator {
+  @apply bg-border/40;
+}
+
+/* Add smooth transitions for theme changes on settings page */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.theme-transition * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, fill 0.3s ease, stroke 0.3s ease;
+}
+
+/* NEW CLERK STYLES - LoginForm Design - REMOVED */
+
+/*
+...styles from the previous attempt...
+*/
+
+/* Ensure background is white/dark */
+body {
+  /* background-color: hsl(var(--background)) !important; /* Ensure body bg is correct */
+}
+.cl-modalBackdrop {
+  /* background-color: rgba(0,0,0,0.5) !important; /* Optional: Dim backdrop */
+}
+
+/* NEW CLERK STYLES - Minimalist Square Design */
+
+/* Backdrop - full screen centering */
+.cl-modalBackdrop {
+  @apply bg-background/90 backdrop-blur-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Center the root box and make it square */
+.cl-rootBox {
+  @apply max-w-md mx-auto;
+  width: min(90vw, 450px);
+  min-height: min(90vh, 600px);
+  max-height: 90vh;
+}
+
+/* Main card styling - minimalist square */
+.cl-card {
+  @apply w-full h-full rounded-lg border border-border/10 shadow-lg;
+  @apply bg-card;
+  @apply overflow-auto;
+  --card-padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding-bottom: 1.5rem;
+}
+
+/* Dark mode enhancements */
+.dark .cl-card {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Header - minimalist */
+.cl-header {
+  @apply text-center mb-6;
+}
+.cl-headerTitle {
+  @apply text-xl font-medium tracking-tight text-foreground;
+}
+.cl-headerSubtitle {
+  @apply text-xs text-muted-foreground mt-1;
+}
+
+/* Form Fields Area - clean spacing */
+.cl-formFieldset {
+  @apply flex flex-col gap-4;
+}
+
+/* Make form field a simple container */
+.cl-formField {
+  @apply relative z-0 w-full mb-3;
+}
+
+/* Simplify input styles */
+.cl-formFieldInput {
+  @apply block py-2 px-3 w-full text-sm bg-background border border-input rounded-md;
+  @apply focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary;
+  @apply transition-colors duration-200;
+  @apply text-foreground;
+}
+
+/* Simplify labels - no floating */
+.cl-formFieldLabel {
+  @apply block text-xs font-medium text-muted-foreground mb-1;
+}
+
+/* Fix for password field with forgot password link */
+.cl-formFieldLabelRow { 
+  @apply flex items-center justify-between mb-1;
+}
+
+/* Forgot Password Link */
+.cl-forgotPasswordLink {
+  @apply text-xs text-primary underline-offset-2 hover:underline;
+}
+
+/* Primary Button - flat and simple */
+.cl-formButtonPrimary {
+  @apply text-white font-medium rounded-md text-sm w-full py-2 px-4 text-center mt-4;
+  @apply transition-all duration-200;
+  @apply bg-primary;
+  @apply focus:ring-2 focus:outline-none focus:ring-primary/30;
+}
+
+.cl-formButtonPrimary:hover {
+  @apply bg-primary/90;
+}
+
+/* Social Buttons - Fix centering issues */
+.cl-socialButtonsBlock {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+  margin: 1.5rem auto !important;
+}
+
+/* Target the actual container of the buttons */
+.cl-socialButtonsBlockButtonsGrid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 64px) !important;
+  justify-content: center !important;
+  gap: 1rem !important;
+  margin: 0 auto !important;
+  width: fit-content !important;
+}
+
+/* Make social buttons more consistent */
+.cl-socialButtonsIconButton {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #f3f4f6 !important;
+  border: 1px solid #e5e7eb !important;
+  transition: all 0.2s ease !important;
+}
+
+.cl-socialButtonsIconButton:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Make icons larger and ensure good contrast */
+.cl-socialButtonsIconButton > svg {
+  width: 28px !important;
+  height: 28px !important;
+  color: #374151 !important;
+  fill: #374151 !important;
+}
+
+/* Apple-specific styling */
+.cl-socialButtonsIconButton[data-provider="apple"] {
+  background-color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+.cl-socialButtonsIconButton[data-provider="apple"] svg,
+.cl-socialButtonsIconButton[data-provider="apple"] svg * {
+  color: #FFFFFF !important;
+  fill: #FFFFFF !important;
+}
+
+/* Dark mode adjustments */
+.dark .cl-socialButtonsIconButton {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+.dark .cl-socialButtonsIconButton > svg {
+  color: #e5e7eb !important;
+  fill: #e5e7eb !important;
+}
+
+/* Keep Apple black in dark mode for brand consistency */
+.dark .cl-socialButtonsIconButton[data-provider="apple"] {
+  background-color: #000000 !important;
+  border-color: #374151 !important;
+}
+
+/* Divider - simplified */
+.cl-dividerRow {
+   @apply relative text-center text-xs my-4;
+}
+.cl-dividerRow::after {
+  content: "";
+  @apply absolute inset-0 top-1/2 z-0 flex items-center border-t border-border;
+}
+.cl-dividerLine {
+   @apply border-none; 
+}
+.cl-dividerText {
+   @apply relative z-10 px-3 bg-card text-muted-foreground text-xs;
+}
+
+/* Footer simplified */
+.cl-footer {
+  @apply mt-4;
+}
+.cl-footerAction {
+  @apply text-center text-xs;
+}
+.cl-footerActionText {
+  @apply text-muted-foreground;
+}
+.cl-footerActionLink {
+  @apply font-medium text-primary underline-offset-2 hover:underline;
+}
+
+/* Remove any lingering ::after from previous attempt */
+.cl-card > .cl-scrollable > div::after {
+    content: none !important;
+}
+
+/* Hide unnecessary elements if needed */
+.cl-identityPreview {
+  display: none !important;
+}
+
+/* Ensure Clerk elements use theme colors */
+.cl-internal-b3fm6y, /* Adjust if internal class changes */
+.cl-main,
+.cl-rootBox,
+.cl-footer {
+  @apply text-foreground;
+}
+
+/* Ensure all text elements use theme colors */
+.cl-card,
+.cl-headerTitle,
+.cl-headerSubtitle,
+.cl-formFieldInput,
+.cl-formFieldLabel,
+.cl-formFieldLabelRow,
+.cl-dividerText,
+.cl-footerAction,
+.cl-footerActionText {
+  @apply text-foreground;
+}
+
+.cl-headerSubtitle,
+.cl-footerActionText,
+.cl-dividerText {
+  @apply text-muted-foreground;
+}
+
+/* Fix focus ring offset for proper theme handling */
+.cl-card *:focus-visible {
+  @apply ring-offset-card;
+}

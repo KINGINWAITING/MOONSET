@@ -3,6 +3,7 @@
 import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
 import type { UserProfile, Post, Comment } from "@/lib/types"
+import { useUser } from "@clerk/nextjs"
 
 // Sample user data
 const sampleUser: UserProfile = {
@@ -263,13 +264,56 @@ interface ProfileContextType {
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined)
 
 export function ProfileProvider({ children }: { children: React.ReactNode }) {
+  const { user: clerkUser, isLoaded } = useUser();
   const [currentUser, setCurrentUser] = useState<UserProfile>(sampleUser)
   const [userPosts, setUserPosts] = useState<Post[]>(samplePosts)
   const [communityMembers, setCommunityMembers] = useState<UserProfile[]>(sampleCommunityMembers)
-  const [communityPosts, setCommunityPosts] = useState<Post[]>([...samplePosts])
+  const [communityPosts, setCommunityPosts] = useState<Post[]>([])
   const [postComments, setPostComments] = useState<Record<string, Comment[]>>(sampleComments)
   const [communityGroups, setCommunityGroups] = useState(sampleCommunityGroups)
   const [upcomingEvents, setUpcomingEvents] = useState(sampleEvents)
+
+  // Update current user with Clerk data when available
+  useEffect(() => {
+    if (isLoaded && clerkUser) {
+      // Create a merged profile that preserves existing data but updates with Clerk user info
+      setCurrentUser(prevUser => {
+        return {
+          ...prevUser,
+          id: clerkUser.id,
+          name: clerkUser.firstName && clerkUser.lastName 
+            ? `${clerkUser.firstName} ${clerkUser.lastName}` 
+            : clerkUser.firstName || prevUser.name,
+          username: clerkUser.username || prevUser.username,
+          avatar: clerkUser.imageUrl || prevUser.avatar,
+          // We'll keep other profile data as is for now
+        };
+      });
+
+      // Also update the user's posts with the new profile info
+      setUserPosts(prevPosts => 
+        prevPosts.map(post => ({
+          ...post,
+          userId: clerkUser.id,
+          author: {
+            name: clerkUser.firstName && clerkUser.lastName 
+              ? `${clerkUser.firstName} ${clerkUser.lastName}` 
+              : clerkUser.firstName || post.author.name,
+            username: clerkUser.username || post.author.username,
+            avatar: clerkUser.imageUrl || post.author.avatar,
+          }
+        }))
+      );
+    }
+  }, [isLoaded, clerkUser]);
+
+  // Initialize community posts
+  useEffect(() => {
+    // Combine user posts with community posts
+    setCommunityPosts([...userPosts, ...samplePosts].sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    ))
+  }, [userPosts])
 
   // Load data from localStorage on mount
   useEffect(() => {

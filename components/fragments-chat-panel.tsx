@@ -54,18 +54,40 @@ export default function FragmentsChatPanel() {
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    if (!chatInput.trim()) return
-    setIsLoading(true)
-    setMessages(prev => [...prev, { role: "user", content: [{ type: "text", text: chatInput }] }])
+    e.preventDefault();
+    if (!chatInput.trim() && files.length === 0) return;
+    setIsLoading(true);
+    // Prepare user message with attachments
+    setMessages(prev => [
+      ...prev,
+      {
+        role: "user",
+        content: [
+          ...(chatInput.trim() ? [{ type: "text", text: chatInput }] : []),
+          ...files.map((file) => ({ type: "file", name: file.name, url: URL.createObjectURL(file), mime: file.type }))
+        ]
+      }
+    ]);
     try {
-      const res = await fetch("/api/openai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: chatInput }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || "OpenAI API error")
+      let response, data;
+      if (files.length > 0) {
+        // Use multipart/form-data for file upload
+        const formData = new FormData();
+        formData.append("prompt", chatInput);
+        files.forEach((file, idx) => formData.append(`file${idx}`, file));
+        response = await fetch("/api/openai", {
+          method: "POST",
+          body: formData,
+        });
+      } else {
+        response = await fetch("/api/openai", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: chatInput }),
+        });
+      }
+      data = await response.json();
+      if (!response.ok) throw new Error(data.error || "OpenAI API error");
       if (data.text && data.text.length > 10) {
         setMessages(prev => [
           ...prev,
@@ -76,16 +98,16 @@ export default function FragmentsChatPanel() {
             ],
             artifact: { content: data.text }
           }
-        ])
+        ]);
       } else {
-        setMessages(prev => [...prev, { role: "assistant", content: [{ type: "text", text: data.text }] }])
+        setMessages(prev => [...prev, { role: "assistant", content: [{ type: "text", text: data.text }] }]);
       }
     } catch (err: any) {
-      setError(err.message || "Failed to fetch response from Gemini API.")
+      setError(err.message || "Failed to fetch response from Gemini API.");
     } finally {
-      setIsLoading(false)
-      setChatInput("")
-      setFiles([])
+      setIsLoading(false);
+      setChatInput("");
+      setFiles([]);
     }
   }
 
@@ -142,6 +164,21 @@ export default function FragmentsChatPanel() {
                           message.artifact
                         ) {
                           return null;
+                        }
+                        if (content.type === 'file') {
+                          // Show image thumbnail or file icon/link
+                          return (
+                            <span key={cid} className="block mt-2">
+                              {content.mime && content.mime.startsWith('image/') ? (
+                                <img src={content.url} alt={content.name} className="rounded-lg max-w-[120px] max-h-[120px] border border-blue-100/30 dark:border-blue-800/60" />
+                              ) : (
+                                <a href={content.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline flex items-center gap-1">
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 inline-block"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-3A2.25 2.25 0 008.25 5.25V9m-3 0h13.5M4.5 9v10.5A2.25 2.25 0 006.75 21h10.5a2.25 2.25 0 002.25-2.25V9m-15 0h15" /></svg>
+                                  {content.name}
+                                </a>
+                              )}
+                            </span>
+                          );
                         }
                         return (
                           <span

@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^4.29.7",
+    "@clerk/themes": "^2.2.34",
     "@google/generative-ai": "^0.24.0",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-accordion": "^1.2.2",
@@ -44,6 +46,7 @@
     "cmdk": "1.0.4",
     "date-fns": "latest",
     "embla-carousel-react": "8.5.1",
+    "ethers": "^6.13.5",
     "framer-motion": "^12.7.3",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
@@ -63,7 +66,8 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.6",
-    "zod": "latest"
+    "zod": "latest",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@types/node": "^22",

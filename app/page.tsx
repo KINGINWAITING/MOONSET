@@ -1,3 +1,5 @@
+"use client";
+
 import { NavLink } from "@/components/nav-link"
 import { MainNav } from "@/components/main-nav"
 import { Button } from "@/components/ui/button"
@@ -37,13 +39,13 @@ export default function Home() {
                     MOONSET: Exposing the <span className="text-blue-500">Lunar Deception</span>
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  MOONSET is a decentralized initiative built on the Ethereum blockchain, committed to investigating the truth behind the Apollo moon missions. By leveraging blockchain technology, artificial intelligence, community governance, and in-depth research, we aim to critically examine and challenge the official narrative.
+                    MOONSET is a decentralized initiative built on the Ethereum blockchain, committed to investigating the truth behind the Apollo moon missions. By leveraging blockchain technology, artificial intelligence, community governance, and in-depth research, we aim to critically examine and challenge the official narrative.
                   </p>
                 </div>
 
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Button asChild size="lg" className="bg-red-500 hover:bg-red-600 text-white">
-                    <NavLink href="/signup">
+                    <NavLink href="/sign-up">
                       Join the Movement <ArrowRight className="ml-2 h-4 w-4" />
                     </NavLink>
                   </Button>

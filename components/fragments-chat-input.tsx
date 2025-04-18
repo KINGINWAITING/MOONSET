@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { X } from 'lucide-react'
-import { SetStateAction, useEffect, useMemo, useState } from 'react'
+import { SetStateAction, useEffect, useMemo, useState, useRef } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
 
 export function FragmentsChatInput({
@@ -67,26 +67,43 @@ export function FragmentsChatInput({
     }
   }
 
+  import { useRef } from 'react';
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const filePreview = useMemo(() => {
-    if (files.length === 0) return null
+    if (files.length === 0) return null;
     return Array.from(files).map((file) => {
+      if (file.type.startsWith('image/')) {
+        return (
+          <div className="relative" key={file.name}>
+            <span
+              onClick={() => handleFileRemove(file)}
+              className="absolute top-[-8] right-[-8] bg-muted rounded-full p-1 cursor-pointer"
+            >
+              <X className="h-3 w-3" />
+            </span>
+            <img
+              src={URL.createObjectURL(file)}
+              alt={file.name}
+              className="rounded-xl w-10 h-10 object-cover"
+            />
+          </div>
+        );
+      }
+      // For non-image files, show a chip with the file name and remove option
       return (
-        <div className="relative" key={file.name}>
+        <div key={file.name} className="relative flex items-center px-2 py-1 bg-muted rounded-lg text-xs mr-2">
+          <span className="mr-1">{file.name}</span>
           <span
             onClick={() => handleFileRemove(file)}
-            className="absolute top-[-8] right-[-8] bg-muted rounded-full p-1 cursor-pointer"
+            className="ml-1 bg-muted rounded-full p-1 cursor-pointer"
           >
             <X className="h-3 w-3" />
           </span>
-          <img
-            src={URL.createObjectURL(file)}
-            alt={file.name}
-            className="rounded-xl w-10 h-10 object-cover"
-          />
         </div>
-      )
-    })
-  }, [files])
+      );
+    });
+  }, [files]);
 
   return (
     <form
@@ -118,22 +135,35 @@ export function FragmentsChatInput({
           placeholder="Type your message..."
         />
         <input
+          ref={fileInputRef}
           type="file"
           multiple
+          accept="*/*"
           className="hidden"
-          id="file-upload"
+          tabIndex={-1}
           onChange={handleFileInput}
         />
-        <label htmlFor="file-upload" className="cursor-pointer">
-          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/60 hover:bg-white/80 transition-all duration-150 shadow text-muted-foreground">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-3A2.25 2.25 0 008.25 5.25V9m-3 0h13.5M4.5 9v10.5A2.25 2.25 0 006.75 21h10.5a2.25 2.25 0 002.25-2.25V9m-15 0h15" />
-            </svg>
-          </span>
-        </label>
+        <button
+          type="button"
+          aria-label="Attach file"
+          data-testid="attach-file-btn"
+          onClick={() => {
+            if (fileInputRef.current) {
+              fileInputRef.current.value = ""; // allow re-upload same file
+              fileInputRef.current.click();
+            } else {
+              (document.querySelector('input[type="file"]') as HTMLInputElement | null)?.click();
+            }
+          }}
+          className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/60 hover:bg-white/80 transition-all duration-150 shadow text-muted-foreground"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-3A2.25 2.25 0 008.25 5.25V9m-3 0h13.5M4.5 9v10.5A2.25 2.25 0 006.75 21h10.5a2.25 2.25 0 002.25-2.25V9m-15 0h15" />
+          </svg>
+        </button>
         <Button
           type="submit"
-          disabled={!input.trim() || isLoading}
+          disabled={(!input.trim() && files.length === 0) || isLoading}
           className="rounded-2xl px-6 py-3 h-12 bg-gradient-to-br from-blue-500 via-blue-400 to-blue-600 text-white font-bold shadow-lg transition-transform duration-150 hover:scale-105 hover:from-blue-600 hover:to-blue-700 focus:ring-2 focus:ring-blue-400"
         >
           Send

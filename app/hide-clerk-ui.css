@@ -1,0 +1,38 @@
+/* Only hide Clerk UI elements that appear in the navbar, not the modals */
+/* Specifically target elements in the navbar, not modal popups */
+header #clerk-components {
+  display: none !important;
+}
+
+/* Only hide specific Clerk UI elements in the navbar */
+header .cl-rootBox, 
+header .cl-userButtonBox,
+header .cl-userButtonTrigger,
+header .cl-userButtonAvatarBox,
+header .cl-userButtonAvatarImage,
+header .cl-organizationSwitcherTrigger,
+header .cl-organizationSwitcherRoot,
+header .cl-notificationButtonTrigger,
+header .cl-notificationButtonRoot {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Make sure our custom components stay visible */
+.custom-user-button {
+  display: flex !important;
+}
+
+/* Only target navbar Clerk components, not modal/popup components */
+header [data-clerk-ui],
+header [data-clerk-component] {
+  display: none !important;
+}
+
+/* Target the specific bell icon in the navbar that we want to hide */
+header .cl-notificationButton,
+header .cl-notificationButtonRoot {
+  display: none !important;
+} 
